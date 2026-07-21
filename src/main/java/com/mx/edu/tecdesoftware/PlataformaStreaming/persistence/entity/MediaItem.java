@@ -1,6 +1,7 @@
 package com.mx.edu.tecdesoftware.PlataformaStreaming.persistence.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -18,6 +19,12 @@ public class MediaItem {
     @Column(length = 1000)
     private String overview;
 
+    @Column(name = "release_date")
+    private LocalDate releaseDate;
+
+    @Column(name = "tmdb_id", unique = true)
+    private Integer tmdbId;
+
     @Column(name = "media_type", nullable = false, length = 20)
     private String mediaType;
 
@@ -26,6 +33,20 @@ public class MediaItem {
 
     @Column(name = "poster_url", length = 300)
     private String posterUrl;
+
+    @Column(length = 20)
+    private String resolution;
+
+    @Column(name = "video_codec", length = 20)
+    private String videoCodec;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "media_genres",
+        joinColumns = @JoinColumn(name = "id_media"),
+        inverseJoinColumns = @JoinColumn(name = "id_genre")
+    )
+    private List<Genre> genres;
 
     @OneToMany(mappedBy = "mediaItem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MediaRequest> requests;
@@ -54,6 +75,22 @@ public class MediaItem {
         this.overview = overview;
     }
 
+    public LocalDate getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public Integer getTmdbId() {
+        return tmdbId;
+    }
+
+    public void setTmdbId(Integer tmdbId) {
+        this.tmdbId = tmdbId;
+    }
+
     public String getMediaType() {
         return mediaType;
     }
@@ -76,6 +113,30 @@ public class MediaItem {
 
     public void setPosterUrl(String posterUrl) {
         this.posterUrl = posterUrl;
+    }
+
+    public String getResolution() {
+        return resolution;
+    }
+
+    public void setResolution(String resolution) {
+        this.resolution = resolution;
+    }
+
+    public String getVideoCodec() {
+        return videoCodec;
+    }
+
+    public void setVideoCodec(String videoCodec) {
+        this.videoCodec = videoCodec;
+    }
+
+    public List<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
     }
 
     public List<MediaRequest> getRequests() {
